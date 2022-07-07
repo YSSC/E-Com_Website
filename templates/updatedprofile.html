@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+    #rcorner {
+      border-radius: 25px;
+      border: 15px solid #707070;
+      padding: 20px;
+      width: 800px;
+      height: 400px;
+      background: #F0BECA;
+      margin: auto;
+      position: relative;
+    }
+    </style>
+</head>
+<body>
+{% extends "base2.html" %}
+{% block content %}
+<p style="font-family: Segoe UI; font-size: 20px;">Home > Profile</p>
+<a href="/"><i class='bx bx-x' style="font-size: 50px; position: absolute; top: 25px; right: 80px; color: #F9426E;"></i></a>
+
+<div id="rcorner">
+    <p>You have successfully updated your profile!</p>
+    <p>Please refresh the page to see the changes!</p>
+</div>
+{% endblock %}
+</body>
+</html>

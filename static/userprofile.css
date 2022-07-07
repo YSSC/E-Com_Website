@@ -1,0 +1,72 @@
+#rcorner {
+  border-radius: 25px;
+  border: 15px solid #707070;
+  padding: 20px;
+  width: 880px;
+  height: 525px;
+  background: #F0BECA;
+  margin: auto;
+  position: relative;
+}
+.left {
+    width: 400px;
+}
+.right-top{
+    height: 200px;
+    width: 400px;
+    position: absolute;
+    top: 35px;
+    right: 0px;
+    text-align: center;
+}
+.right-bot{
+    height: 235px;
+    width: 400px;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+}
+.vl {
+  position: absolute;
+  right: 50%;
+  border-left: 8px solid black;
+  height: 463px;
+}
+form {
+    font-family: Segoe UI;
+}
+
+.change:hover {
+    background: grey;
+}
+
+.save {
+    background: #ADF9FE;
+    width: 150px;
+    font-size: 22px;
+    font-weight: bold;
+    position: absolute;
+    margin: 20px 0 0 90px;
+}
+.save:hover{
+    background: #CEF7F9;
+}
+.circle {
+  height: 45px;
+  width: 45px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+hr.line {
+    border: 1px solid black;
+}
+.bank {
+  height: 20px;
+  width: 180px;
+  background-color: white;
+  float: right;
+  text-align: center;
+  font-family: Dubai;
+  font-weight: 550;
+}

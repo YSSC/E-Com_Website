@@ -1,0 +1,93 @@
+
+{% extends "base_rewards.html" %}
+{% block title %}Library Loan System - Rewards Customer{% endblock %}
+{% block content %}
+
+<h1 class ="display-4">Rewards</h1>
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+      <a style = "color:black;" class="nav-link active" data-bs-toggle="tab" href="#Points">Points</a>
+  </li>
+  <li class="nav-item">
+    <a style = "color:black;" class="nav-link" data-bs-toggle="tab" href="#Vouchers">Vouchers</a>
+  </li>
+</ul>
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table, th, td {
+  border: 3px solid white;
+  background-color: #000000;
+  border-collapse: collapse;
+}
+
+
+</style>
+</head>
+<body>
+<!-- Tab panes -->
+
+    <div class="tab-content">
+      <div class="tab-pane container-fluid active" id="Points">
+          <br>
+        <h2>Points</h2>
+        <br>
+              <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th style = "color:pink;">Product Name</th>
+                  <th style = "color:pink;">Expiry</th>
+                  <th style = "color:pink;">Points Needed</th>
+                  <th style = "color:pink;">Image</th>
+                  <th style = "color:pink;">Code</th>
+                </tr>
+              </thead>
+                  <tbody>
+        {% for point in points_list %}
+        {% if point.get_status() == "Available" %}
+            <tr>
+              <td style = "color:pink;">{{ point.get_product_name() }}</td>
+              <td style = "color:pink;">{{ point.get_expiry() }}</td>
+              <td style = "color:pink;">{{ point.get_points_needed() }}</td>
+              <td></td>
+              <td style = "color:pink;">{{ point.get_code() }}</td>
+            </tr>
+          </tbody>
+        {% endif %}
+        {% endfor %}
+        </table>
+      </div>
+
+
+
+      <div class="tab-pane container-fluid fade" id="Vouchers">
+          <br>
+        <h2>Vouchers</h2>
+        <br>
+          <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th style = "color:pink;">Product Name</th>
+                  <th style = "color:pink;">Expiry</th>
+                  <th style = "color:pink;">Image</th>
+                  <th style = "color:pink;">Code</th>
+                </tr>
+              </thead>
+                  <tbody>
+        {% for voucher in vouchers_list %}
+        {% if voucher.get_status() == "Available" %}
+            <tr>
+              <td style = "color:pink;">{{ voucher.get_product_name() }}</td>
+              <td style = "color:pink;">{{ voucher.get_expiry() }}</td>
+              <td></td>
+              <td style = "color:pink;">{{ voucher.get_code() }}</td>
+            </tr>
+          </tbody>
+        {% endif %}
+        {% endfor %}
+        </table>
+      </div>
+        </div>
+    {% endblock %}

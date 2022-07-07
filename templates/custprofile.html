@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='userprofile.css') }}" >
+    <style>
+        @mixin object-center {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        $circleSize: 165px;
+        $radius: 100px;
+        $shadow: 0 0 10px 0 rgba(255,255,255,.35);
+        $fontColor: rgb(250,250,250);
+        .profile-pic {
+          color: transparent;
+          transition: all .3s ease;
+          @include object-center;
+          position: relative;
+          transition: all .3s ease;
+
+          input {
+            display: none;
+          }
+
+          img {
+            position: absolute;
+            object-fit: cover;
+            width: $circleSize;
+            height: $circleSize;
+            box-shadow: $shadow;
+            border-radius: $radius;
+            z-index: 0;
+          }
+
+          .-label {
+            cursor: pointer;
+            height: $circleSize;
+            width: $circleSize;
+          }
+
+          &:hover {
+            .-label {
+              @include object-center;
+              background-color: rgba(0,0,0,.8);
+              z-index: 10000;
+              color: $fontColor;
+              transition: background-color .2s ease-in-out;
+              border-radius: $radius;
+              margin-bottom: 0;
+            }
+          }
+
+          span {
+            display: inline-flex;
+            padding: .2em;
+            height: 2em;
+          }
+        }
+    </style>
+
+    <script>
+    var loadFile = function (event) {
+    var image = document.getElementById("output");
+      image.src = URL.createObjectURL(event.target.files[0]);
+    };
+    </script>
+
+</head>
+<body>
+{% extends "base2.html" %}
+{% block content %}
+{% if 'email_updated' in session %}
+<div class="alert alert-warning alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{session.pop('email_updated', None) }}
+</div>
+{% elif 'phonenumber_updated' in session %}
+<div class="alert alert-warning alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('phonenumber_updated', None) }}
+</div>
+{% elif 'password_updated' in session %}
+<div class="alert alert-warning alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('password_updated', None) }}
+</div>
+{% elif 'c_d_card_added' in session %}
+<div class="alert alert-warning alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('c_d_card_added', None) }}
+</div>
+{% endif %}
+
+<a href="/home2" style="font-family: Segoe UI; font-size: 20px; color: black;">Home > Profile</a>
+<div id="rcorner">
+    <div class="vl"></div>
+    <div class="left">
+        <p style="font-size: 20px; font-weight: bold; font-family: Dubai; background: white; width: 250px;"><u>Update Your Personal Details</u></p>
+        <form method="POST" action="">
+            <div class="form">
+            <span>My profile picture:</span>
+            <div class="profile-pic" style="float: left;">
+                <label class="-label" for="file">
+                    <span class="glyphicon glyphicon-camera"></span>
+                </label>
+                <br>
+                <input id="file" type="file" onchange="loadFile(event)" accept=".jpg, .jpeg, .png"/>
+                <img src="/static/img/img.png" id="output" width="100" />
+            </div>
+                <br>
+                <br>
+                First Name: &nbsp;<span style="width:150px;height:50px;background-color: white;">{{ customer.get_first_name() }}</span>
+                &nbsp; &nbsp; &nbsp;
+                Last Name: &nbsp;<span style="width:350px;height:50px; background-color: white;">{{ customer.get_last_name() }}</span><br>
+                Gender: &nbsp;<span style="width:150px;height:50px;background-color: white;">{{ customer.get_gender() }}</span><br>
+                Email: &nbsp;<span style="width:150px;height:50px;background-color: white;">{{ customer.get_email() }}</span>
+            <a href="/change_email/{{customer.get_customer_id()}}"><input type="button" class="change" value="Edit"></a><br>
+
+                Phone Number: &nbsp;<span style="width:150px;height:50px;background-color: white;">{{ customer.get_phonenumber() }}</span>
+            <a href="/change_phonenumber/{{customer.get_customer_id()}}"><input type="button" class="change" value="Edit"></a><br>
+
+                Date Of Birth: &nbsp;<span style="width:150px;height:50px;background-color: white;">{{ customer.get_dateofbirth() }}</span>
+
+                <div class="form-group">
+                    Address: &nbsp;<span style="width:150px;height:50px;background-color: white;">{{ customer.get_address() }}</span><br>
+
+                <label for="password">Password</label>
+                <a href="/change_password/{{customer.get_customer_id()}}"><input type="button" class="change" id="password" value="Edit"></a><br>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="right-top">
+        <span style="font-size: 20px; font-weight: bold; font-family: Dubai; background: white; width: 140px; float: left;"><u>My Membership</u></span>
+        <div class="form-group">
+            A/C created on <u>{{ customer.get_date_joined() }}</u>
+        </div>
+        <span class="circle" style="background-color: #CD7F32; border: 3px solid red;">Insider</span>
+        <i class='bx bxs-right-arrow-alt' style="font-size: 40px;"></i>
+        <span class="circle" style="background-color: #C0C0C0;">VIB</span>
+        <i class='bx bxs-right-arrow-alt' style="font-size: 40px;"></i>
+        <span class="circle" style="background-color: #FFD700;">Rogue</span>
+        <p>You have spent: <u>$80</u> !</p>
+        <p>Spend <u>$270</u> more to reach the next tier!</p>
+        <hr class="line">
+        <hr class="line">
+    </div>
+
+    <div class="right-bot">
+        <span style="font-size: 20px; font-weight: bold; font-family: Dubai; background: white; width: 140px;"><u>My Linked Payment Methods</u></span><br><br>
+        <span style="font-weight: bold;">Credit / Debit Card</span>
+        {% if card == None %}
+            <a href="/cardpayment"><button style="float: right;"><i class='bx bx-plus'></i></button></a><div class="bank">Add A New Card</div><br>
+        {% else %}
+            <a href="/deleteCard/{{card.get_card_id()}}"><button type="button" class="btn btn-danger" style="float: right;" onclick="return confirm('Are you sure you want to delete the Card? ');">
+                Remove
+            </button></a>
+            <p style="float: right;">{{ card.get_cnum() }}</p>
+            <br><br>
+            <a href="/cardpayment"><button style="float: right;"><i class='bx bx-plus'></i></button></a><div class="bank">Add A New Card</div><br>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+</body>
+</html>

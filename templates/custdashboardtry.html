@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script>
+    google.charts.load('current', {packages: ['corechart', 'line']});
+    google.charts.setOnLoadCallback(drawBasic);
+
+  function drawBasic() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'X');
+        data.addColumn('number', 'Customers');
+
+        data.addRows([
+          [2014, 65],   [2015, 100],  [2016, 123],  [2017, 167],  [2018, 197],  [2019, 180],
+          [2020, 197],  [2021, 227],  [2022, 255]
+        ]);
+
+        var options = {
+          hAxis: {
+            title: 'Years'
+          },
+          vAxis: {
+            title: 'No. Of Customers'
+          }
+        };
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+  </script>
+
+<body>
+{% extends "base3.html" %}
+{% block title %}Admin - Customer Dashboard{% endblock %}
+
+{% block content %}
+  <h1 style="text-align: center;">Customer Accounts Creation Statistics</h1>
+  <ul class="nav nav-tabs">
+        <li class="nav-item">
+        <a class="nav-link active" href="/custdashboard">Yearly</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " href="/custdashboardmonth">Monthly</a>
+        </li>
+    </ul>
+  <div id="chart_div"></div>
+{% endblock %}
+</body>
+</html>

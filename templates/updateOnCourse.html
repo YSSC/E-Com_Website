@@ -1,0 +1,48 @@
+{% extends "base3.html" %}
+{% block title %}Library Loan System - Update Online Course{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+<h1 class="display-4">Update Online Course</h1>
+
+<form method="POST" action="">
+  <div class="form-group">
+    {{ render_field(form.course_name, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.course_instructor, class="form-control") }}
+  </div>
+    <div class="form-group">
+    {{ render_field(form.course_description, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.course_date, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.course_time, class="form-check", style="list-style-type:none") }}
+  </div>
+  <div class="form-group">
+      {{ render_field(form.course_duration, class="form-control") }}
+  </div>
+  <div class="form-group">
+      {{ render_field(form.course_link, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.course_status, class="form-control") }}
+  </div>
+  <div>
+    {{ render_field(form.image, class="form-control",
+    onchange="document.getElementById('preview_img').src = window.URL.createObjectURL(this.files[0])")
+    }}
+  </div>
+  <br>
+  <h8>Preview image</h8><br>
+
+  <div class="col-lg-4">
+  <img id="preview_img" style="height: 120px; width: 240px" />
+  </div>
+  <br>
+  <input type="submit" value="Submit" class="btn btn-primary" />
+</form>
+{% endblock %}

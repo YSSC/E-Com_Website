@@ -1,0 +1,174 @@
+{% extends "base3.html" %}
+{% block title %}Retrieve Orders{% endblock %}
+
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+<h1 class="display-4">Retrieve Orders</h1>
+<div>
+  {% if count == 0 %}
+  <p>There are no orders.</p>
+  {% elif count == 1 %}
+  <p>There is 1 order.</p>
+  {% else %}
+  <p>There are {{ count }} orders.</p>
+  {% endif %}
+</div>
+
+<div>
+  <button type="button"  class="btn btn-success"><a href="/createOrder">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus"
+      viewBox="0 0 16 16">
+      <path
+        d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z">
+      </path>
+      <path fill-rule="evenodd"
+        d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z">
+      </path>
+    </svg>Create</a></button>
+    <input type="text" style="margin-right: 5px;" id="myInput" onkeyup="myFunction()" placeholder="Search for events..">
+
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Order Date</th>
+        <th>Quantity</th>
+        <th>Product Number</th>
+        <th>Product</th>
+        <th>Category</th>
+        <th>Sub-Category</th>
+        <th>Supplier</th>
+        <th>Amount</th>
+        <th>Delivery Date</th>
+        <th>Order Status</th>
+        <th></th>
+        <th></th>
+        <th>Extract Data</th>
+      </tr>
+    </thead>
+    <tbody id="myTable">
+      {% for order in orders_list %}
+      <tr>
+        <td>{{ order.get_order_id() }}</td>
+        <td>{{ order.get_order_date() }}</td>
+        <td>{{ order.quantity }}</td>
+        <td>{{ order.product_number }}</td>
+        <td>{{ order.product }}</td>
+        <td>{{ order.category }}</td>
+        <td>{{ order.sub_category }}</td>
+        <td>{{ order.supplier }}</td>
+        <td>{{ order.get_amount() }}</td>
+        <td>{{ order.get_delivery_date() }}</td>
+        {% if order.order_status == 'Delivering' %}
+        <td>
+          <form action="{{url_for('status_order', id=order.get_order_id())}}" id="order.get_order_id()" method="POST">
+            <button class="btn btn-success">{{ order.order_status }}</button>
+          </form>
+        </td>
+        {% elif order.order_status == 'Delivered' %}
+        <td>
+          <form action="{{url_for('status_order', id=order.get_order_id())}}" id="order.get_order_id()" method="POST">
+            <button class="btn btn-danger">{{ order.get_order_status() }}</button>
+          </form>
+        </td>
+        {% endif %}
+
+        <td><a href="/updateOrder/{{order.get_order_id()}}" class="btn btn-warning">Update</a></td>
+<td>
+          <form action="{{url_for('delete_order', id=order.get_order_id())}}" method="POST">
+                <!-- Button to Open the Modal -->
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{order.get_order_id()}}">
+                  Delete
+                </button>
+
+                <!-- The Modal -->
+                <div class="modal" id="myModal_{{order.get_order_id()}}">
+                  <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                        <h4 class="modal-title">Delete Confirmation</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+
+                      <!-- Modal body -->
+                      <div class="modal-body">
+                        Are you sure you want to delete <br>
+                          Order ID: {{order.get_order_id()}}
+                          <br>
+                          Order Date: {{order.get_order_date()}}
+                          <br>
+                          Product: {{order.product}}
+                          <br>
+                          Supplier: {{order.supplier}} ?
+                        <table>
+                              <tr>
+                                <th>Order ID</th>
+                                <th>Order Date</th>
+                                <th>Quantity</th>
+                                <th>Product Number</th>
+                                <th>Product</th>
+                                <th>Category</th>
+                                <th>Sub-Category</th>
+                                <th>Supplier</th>
+                                <th>Amount</th>
+                                <th>Delivery Date</th>
+                                <th>Order Status</th>
+                                <th></th>
+                                <th></th>
+                              </tr>
+                              {% if order.supplier == order.supplier %}
+                              <tr>
+                                <td>{{ order.get_order_id() }}</td>
+                                <td>{{ order.get_order_date() }}</td>
+                                <td>{{ order.quantity }}</td>
+                                <td>{{ order.product_number }}</td>
+                                <td>{{ order.product }}</td>
+                                <td>{{ order.category }}</td>
+                                <td>{{ order.sub_category }}</td>
+                                <td>{{ order.supplier }}</td>
+                                <td>{{ order.get_amount() }}</td>
+                                <td>{{ order.get_delivery_date() }}</td>
+                                <td>{{ order.order_status }} </td>
+                                  <td></td>
+                                  <td></td>
+                              </tr>
+                              {% endif %}
+                          </table>
+                      </div>
+
+                      <!-- Modal footer -->
+                      <div class="modal-footer">
+                        <input type="submit" value="Delete" class="btn btn-danger">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+          </form>
+        </td>
+        <td>
+          <form action="{{url_for('extractdata', id=order.get_order_id())}}" id=order.get_order_id() method="POST">
+            <button class="btn btn-dark"><i class="fa fa-download" aria-hidden="true"></i>CSV File</button>
+          </form>
+        </td>
+
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script>
+    google.charts.load('current', {packages: ['corechart', 'line']});
+    google.charts.setOnLoadCallback(drawBasic);
+
+  function drawBasic() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Months');
+        data.addColumn('number', 'Customers');
+
+        data.addRows([
+          ['2021 Jan', 195],   ['2021 Feb', 200],  ['2021 Mar', 219],  ['2021 Apr', 213],  ['2021 May', 218],  ['2021 Jun', 218],
+          ['2021 Jul', 220],  ['2021 Aug', 223],  ['2021 Sept', 224], ['2021 Oct', 220], ['2021 Nov', 225], ['2021 Dec', 227],
+        ]);
+
+        var options = {
+          hAxis: {
+            title: 'Month-Year'
+          },
+          vAxis: {
+            title: 'No. Of Customers'
+          }
+        };
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+  </script>
+
+<body>
+{% extends "base3.html" %}
+{% block title %}Admin - Customer Dashboard{% endblock %}
+
+{% block content %}
+  <h1 style="text-align: center;">Customer Account Creation Statistics - Monthly</h1>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+        <a class="nav-link" href="/custdashboard">Yearly</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="/custdashboardmonth">Monthly</a>
+        </li>
+    </ul>
+  <div id="chart_div"></div>
+{% endblock %}
+</body>
+</html>
+

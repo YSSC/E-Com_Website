@@ -1,0 +1,58 @@
+{% extends "base3.html" %}
+{% block title %}ESTHER - Retrieve Vouchers{% endblock %}
+
+{% block content %}
+<h1 class="display-4">Retrieve Vouchers</h1>
+<div>
+  {% if count == 0 %}
+  <p>There are no vouchers.</p>
+  {% elif count == 1 %}
+  <p>There is 1 voucher.</p>
+  {% else %}
+  <p>There are {{ count }} vouchers.</p>
+  {% endif %}
+</div>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Voucher ID</th>
+        <th>Product Name</th>
+        <th>Claimed</th>
+        <th>Expiry</th>
+        <th>Status</th>
+        <th>Code</th>
+        <th>Image</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for voucher in vouchers_list %}
+      <tr>
+        <td>{{ voucher.get_voucher_id() }}</td>
+        <td>{{ voucher.get_product_name() }}</td>
+        <td>{{ voucher.get_claimed() }}</td>
+        <td>{{ voucher.get_expiry() }}</td>
+        {% if voucher.get_status() == "Fully Redeemed" %}
+        <td style="color: #FE1414; font-weight: bold;">Fully Redeemed</td>
+        {% elif voucher.get_status() == "Available" %}
+        <td style="color: #00917C; font-weight: bold;">Available</td>
+        {% endif %}
+        <td>{{ voucher.get_code() }}</td>
+        <td></td>
+        <td><a href="/updateVoucher/{{voucher.get_voucher_id()}}" class="btn btn-warning">Update</a></td>
+        <td>
+                 <form action="{{url_for('delete_voucher', id=voucher.get_voucher_id())}}" method="POST">
+                   <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{voucher.get_product_name() }}');">
+                    </form>
+
+        </td>
+
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+

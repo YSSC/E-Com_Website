@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <style>
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  margin: auto;
+  text-align: center;
+  font-family: arial;
+}
+</style>
+</head>
+<body>
+{% extends "base3.html" %}
+{% block content %}
+{% from "_formHelper.html" import render_field %}
+<p style="font-family: Segoe UI; font-size: 20px;">Home > Profile > Edit Profile</p>
+<div class="card">
+    <form action="" method="POST" class="form-container">
+        <h3>Edit Your Profile Info:</h3>
+            {{ render_field(form.first_name, class="form-control") }}<br>
+            {{ render_field(form.last_name, class="form-control") }}<br>
+            {{ render_field(form.gender, class="form-control") }}<br>
+            {{ render_field(form.email, class="form-control") }}<br>
+            {{ render_field(form.phonenumber, class="form-control") }}<br>
+        <a href="/adminprofile"><button type="button" class="btn btn-secondary btn-lg">Cancel</button></a>
+        <input type="submit" value="Submit" class="btn btn-primary" style="font-size: 20px; margin: auto; background-color: #7CE5F1;">
+    </form>
+</div>
+{% endblock %}
+</body>
+</html>

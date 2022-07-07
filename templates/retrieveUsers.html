@@ -1,0 +1,102 @@
+{% extends "base3.html" %}
+{% block title %}ESTHER - Retrieve Staff{% endblock %}
+    <link href="https://demo.dashboardpack.com/architectui-html-free/main.css" rel="stylesheet">
+{% block content %}
+
+{% if 'user_created' in session %}
+<div class="alert alert-success alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('user_created', None) }} was created.
+</div>
+{% elif 'user_updated' in session %}
+<div class="alert alert-warning alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('user_updated', None) }} was updated.
+</div>
+{% endif %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#input").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#table tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+<ul class="nav nav-tabs" style="float: right;">
+    <li class="nav-item">
+        <a class="nav-link active" href="/retrieveUsers">Admins</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/retrieveCustomers">Customers</a>
+    </li>
+</ul>
+<h1 class="display-4">All Admins</h1>
+<div>
+  {% if count == 0 %}
+  <p>There are no users.</p>
+  {% elif count == 1 %}
+  <p>There is 1 user.</p>
+  {% else %}
+  <p>There are a total of {{ count }} users.</p>
+  {% endif %}
+</div>
+
+<div id="myBtnContainer">
+  <input type="text" style="margin-right: 5px;" id="input" onkeyup="myFunction()" placeholder="Search for users..">
+</div>
+
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>User ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Gender</th>
+        <th>Email Address</th>
+        <th>Phone Number</th>
+        <th>Date Of Birth</th>
+        <th>Job Scope</th>
+        <th>Password</th>
+        <th>Confirm Password</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="table">
+          {% for user in users_list %}
+      <tr>
+        <td>{{ user.get_user_id() }}</td>
+        <td>{{ user.get_first_name() }}</td>
+        <td>{{ user.get_last_name() }}</td>
+        <td>{{ user.get_gender() }}</td>
+        <td>{{ user.get_email() }}</td>
+        <td>{{ user.get_phonenumber() }}</td>
+        <td>{{ user.get_dateofbirth() }}</td>
+        {% if user.get_jobscope() == "Sales" %}
+        <td>Sales</td>
+        {% elif user.get_jobscope() == "Marketing" %}
+        <td>Marketing</td>
+        {% elif user.get_jobscope() == "Finance" %}
+        <td>Finance</td>
+        {% elif user.get_jobscope() == "Others" %}
+        <td>Others</td>
+        {% endif %}
+        <td>{{ user.get_password() }}</td>
+        <td>{{ user.get_confirmpassword() }}</td>
+
+        {% if user.get_status() == "Active" %}
+        <td><div style="background-color: #33FF79; color: black; width: 70px; line-height: 30px; text-align: center;" class="badge badge-success">Active</div></td>
+        {% elif user.get_status() == "Inactive" %}
+        <td><div style="background-color: #FF0000; color: black; width: 70px; line-height: 30px; text-align: center;" class="badge badge-danger">Inactive</div></td>
+        {% endif %}
+        <td><a href="/updateUser/{{user.get_user_id()}}" class="btn btn-warning">Update</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

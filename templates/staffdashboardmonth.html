@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script>
+    google.charts.load('current', {packages: ['corechart', 'line']});
+    google.charts.setOnLoadCallback(drawBasic);
+
+  function drawBasic() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Months');
+        data.addColumn('number', 'Staff');
+
+        data.addRows([
+          ['2021 Jan', 15],   ['2021 Feb', 12],  ['2021 Mar', 23],  ['2021 Apr', 19],  ['2021 May', 18],  ['2021 Jun', 20],
+          ['2021 Jul', 22],  ['2021 Aug', 23],  ['2021 Sept', 24], ['2021 Oct', 24], ['2021 Nov', 25], ['2021 Dec', 27],
+        ]);
+
+        var options = {
+          hAxis: {
+            title: 'Month-Year'
+          },
+          vAxis: {
+            title: 'No. Of Staff'
+          }
+        };
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+  </script>
+
+<body>
+{% extends "base3.html" %}
+{% block title %}Admin - Staff Dashboard{% endblock %}
+
+{% block content %}
+  <h1 style="text-align: center;">Staff Account Creation Statistics - Monthly</h1>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+        <a class="nav-link" href="/staffdashboard">Yearly</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="/staffdashboardmonth">Monthly</a>
+        </li>
+    </ul>
+  <div id="chart_div"></div>
+{% endblock %}
+</body>
+</html>

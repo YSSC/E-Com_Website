@@ -1,0 +1,117 @@
+{% extends "CustomerPOVBase.html" %}
+{% block title %}Retrieve Products{% endblock %}
+{% block content %}
+<html>
+  <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-lg-3 col-md-4 col-sm-12">
+            <div class="card product_item">
+                <div class="body">
+                    <div class="cp_img">
+                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Product" class="img-fluid">
+                        <div class="hover">
+                            <a href="javascript:void(0);" class="btn btn-primary btn-sm waves-effect"><i class="zmdi zmdi-plus"></i></a>
+                            <a href="javascript:void(0);" class="btn btn-primary btn-sm waves-effect"><i class="zmdi zmdi-shopping-cart"></i></a>
+                        </div>
+                    </div>
+                    <div class="product_details">
+                        <h5>{{ product.get_price() }}</h5>
+                        <ul class="product_price list-unstyled">
+                            <li>{{ product.get_price() }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-12">
+            <div class="card product_item">
+                <div class="body">
+                    <div class="cp_img">
+                        <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="Product" class="img-fluid">
+                        <div class="hover">
+                            <a href="javascript:void(0);" class="btn btn-primary btn-sm waves-effect"><i class="zmdi zmdi-plus"></i></a>
+                            <a href="javascript:void(0);" class="btn btn-primary btn-sm waves-effect"><i class="zmdi zmdi-shopping-cart"></i></a>
+                        </div>
+                    </div>
+<div>
+  <table class="product_details">
+    <thead>
+      <tr>
+        <th>Customer ID</th>
+        <th>Brand Name</th>
+        <th>Product Name</th>
+        <th>Shade</th>
+        <th>Number</th>
+        <th>Price</th>
+        <th>Description</th>
+        <th>Category</th>
+        <th>Sub-Category</th>
+        <th>Quantity</th>
+        <th>Image</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for product in product_list %}
+      <tr>
+        <td>{{ product.get_product_id() }}</td>
+        <td>{{ product.get_brand() }}</td>
+        <td>{{ product.get_name() }}</td>
+        <td>{{ product.get_shade() }}</td>
+        <td>{{ product.get_number() }}</td>
+        <td>{{ product.get_price() }}</td>
+        <td>{{ product.get_description() }}</td>
+        <td>{{ product.get_category() }}</td>
+        <td>{{ product.get_category() }}</td>
+        <td>{{ product.get_quantity() }}<td>
+         <td><input type="file" onchange="readURL(this);" />
+          <img id="blah" src="#" alt="your image" /></td>
+
+        <td><a href="/updateProduct/{{product.get_product_id()}}" class="btn btn-warning">Update</a></td>
+        <td>
+           <form action="{{url_for('delete_product', id=product.get_product_id())}}" method="POST">
+<!--            <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{product.get_brand()}} {{product.get_name()}}?');">-->
+          <!-- Button to Open the Modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal_{{product.get_product_id()}}">
+      Delete
+    </button>
+
+    <!-- The Modal -->
+    <div class="modal" id="myModal_{{product.get_product_id()}}">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Delete Confirmation</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            Are you sure you want to delete {{product.get_brand()}} {{product.get_name()}}?
+          </div>
+
+
+          <!-- Modal footer -->
+          <input type="submit" value="Delete" class="btn btn-danger">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          </div>
+
+        </div>
+      </div>
+           </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+   </form>
+   </div>
+</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

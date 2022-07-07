@@ -1,0 +1,77 @@
+{%extends "base3.html"%}
+{%block title%}ESTHER - Offline Course{%endblock%}
+
+{% block content %}
+
+<h1 class="display-4">Manage Courses</h1>
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" href="#">Offline Course</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/retrieveOnCourses">Online Course</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane container-fluid active">
+
+        <br>
+        <h2>Offline Course</h2>
+        <div>
+            {% if count == 0 %}
+            <p>There are no offline courses.</p>
+            {% elif count == 1 %}
+            <p>There is 1 offline course.</p>
+            {% else %}
+            <p>There are {{ count }} offline courses.</p>
+            {% endif %}
+        </div>
+        <a href="/createOffCourse" class="btn btn-primary btn-lg">Create Offline Course</a>
+        <div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Course ID</th>
+                    <th>Course Name</th>
+                    <th>Course Description</th>
+                    <th>Course Instructor</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Duration</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Update</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for offcourse in off_courses_list %}
+                <tr>
+                    <td>{{ offcourse.get_course_id() }}</td>
+                    <td>{{ offcourse.get_course_name() }}</td>
+                    <td>{{ offcourse.get_course_description() }}</td>
+                    <td>{{ offcourse.get_course_instructor() }}</td>
+                    <td>{{ offcourse.get_course_date() }}</td>
+                    <td>{{ offcourse.get_course_time() }}</td>
+                    <td>{{ offcourse.get_course_duration() }}</td>
+                    <td>{{ offcourse.get_course_location() }}</td>
+
+                    {% if offcourse.get_course_status() == "Upcoming" %}
+                    <td style="color: #7b809a; font-weight: bold;">Upcoming</td>
+                    {% elif offcourse.get_course_status() == "Available" %}
+                    <td style="color: #00917C; font-weight: bold;">Available</td>
+                    {% elif offcourse.get_course_status() == "Closed" %}
+                    <td style="color: #FE1414; font-weight: bold;">Closed</td>
+                    {% endif %}
+
+                    <td><a href="/updateOffCourse/{{offcourse.get_course_id()}}" class="btn btn-warning">Update</a></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{%endblock%}

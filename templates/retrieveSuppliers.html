@@ -1,0 +1,237 @@
+{% extends "base3.html" %}
+{% block title %}Retrieve Suppliers{% endblock %}
+
+{% block content %}
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+<h1 class="display-4">Retrieve Suppliers</h1>
+<div>
+  {% if count == 0 %}
+  <p>There are no suppliers.</p>
+  {% elif count == 1 %}
+  <p>There is 1 supplier.</p>
+  {% else %}
+  <p>There are {{ count }} suppliers.</p>
+  {% endif %}
+</div>
+
+<div>
+  <button type="button" class="btn btn-success"><a href ="/createSupplier">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus" viewBox="0 0 16 16">
+  <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"></path>
+  <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"></path>
+</svg>Create</a></button>
+  <input type="text" style="margin-right: 5px;" id="myInput" onkeyup="myFunction()" placeholder="Search for events..">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Supplier ID</th>
+        <th>Supplier</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Contact Number</th>
+        <th>Address</th>
+        <th>Country/State</th>
+        <th>Postal Code</th>
+        <th>Bank</th>
+        <th>Bank Account</th>
+        <th>Status</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="myTable">
+      {% for supplier in suppliers_list %}
+      {% if supplier.get_status() == "Non-Active" %}
+      <tr style="background-color: grey; ">
+        <td>{{ supplier.get_supplier_id() }}</td>
+        <td>{{ supplier.get_supplier() }}</td>
+        <td>{{ supplier.get_name() }}</td>
+        <td>{{ supplier.get_email() }}</td>
+        <td>{{ supplier.get_contact_no() }}</td>
+        <td>{{ supplier.get_address() }}</td>
+        <td>{{ supplier.get_country() }}</td>
+        <td>{{ supplier.get_postal_code() }}</td>
+        <td>{{ supplier.get_bank() }}</td>
+        <td>{{ supplier.get_bank_acc() }}</td>
+        <td>{{ supplier.get_status() }}</td>
+        <td><a href="/updateSupplier/{{supplier.get_supplier_id()}}" class="btn btn-warning">Update</a></td>
+<td>
+          <form action="{{url_for('delete_supplier', id=supplier.get_supplier_id())}}" method="POST">
+                <!-- Button to Open the Modal -->
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{supplier.get_supplier_id()}}">
+                  Delete
+                </button>
+
+                <!-- The Modal -->
+                <div class="modal" id="myModal_{{supplier.get_supplier_id()}}">
+                  <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                        <h4 class="modal-title">Delete Confirmation</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+
+                      <!-- Modal body -->
+                      <div class="modal-body">
+                        Are you sure you want to delete <br>
+                          ID: {{supplier.get_supplier_id()}}
+                          <br>
+                          Supplier: {{supplier.get_supplier()}}
+                          <br>
+                          Name: {{supplier.get_name()}}?
+                        <table>
+                              <tr>
+                                <th>Supplier ID</th>
+                                <th>Supplier</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Contact Number</th>
+                                <th>Address</th>
+                                <th>Country/State</th>
+                                <th>Postal Code</th>
+                                <th>Bank</th>
+                                <th>Bank Account</th>
+                                <th>Status</th>
+                                <th></th>
+                                <th></th>
+                              </tr>
+                              {% if supplier.supplier == supplier.supplier %}
+                              <tr>
+                                <td>{{ supplier.get_supplier_id() }}</td>
+                                <td>{{ supplier.get_supplier() }}</td>
+                                <td>{{ supplier.get_name() }}</td>
+                                <td>{{ supplier.get_email() }}</td>
+                                <td>{{ supplier.get_contact_no() }}</td>
+                                <td>{{ supplier.get_address() }}</td>
+                                <td>{{ supplier.get_country() }}</td>
+                                <td>{{ supplier.get_postal_code() }}</td>
+                                <td>{{ supplier.get_bank() }}</td>
+                                <td>{{ supplier.get_bank_acc() }}</td>
+                                <td>{{ supplier.get_status() }}</td>
+                                  <td></td>
+                                  <td></td>
+                              </tr>
+                              {% endif %}
+                          </table>
+                      </div>
+
+                      <!-- Modal footer -->
+                      <div class="modal-footer">
+                        <input type="submit" value="Delete" class="btn btn-danger">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr >
+        <td>{{ supplier.get_supplier_id() }}</td>
+        <td>{{ supplier.get_supplier() }}</td>
+        <td>{{ supplier.get_name() }}</td>
+        <td>{{ supplier.get_email() }}</td>
+        <td>{{ supplier.get_contact_no() }}</td>
+        <td>{{ supplier.get_address() }}</td>
+        <td>{{ supplier.get_country() }}</td>
+        <td>{{ supplier.get_postal_code() }}</td>
+        <td>{{ supplier.get_bank() }}</td>
+        <td>{{ supplier.get_bank_acc() }}</td>
+        <td>{{ supplier.get_status() }}</td>
+        <td><a href="/updateSupplier/{{supplier.get_supplier_id()}}" class="btn btn-warning">Update</a></td>
+<td>
+          <form action="{{url_for('delete_supplier', id=supplier.get_supplier_id())}}" method="POST">
+                <!-- Button to Open the Modal -->
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{supplier.get_supplier_id()}}">
+                  Delete
+                </button>
+
+                <!-- The Modal -->
+                <div class="modal" id="myModal_{{supplier.get_supplier_id()}}">
+                  <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                        <h4 class="modal-title">Delete Confirmation</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+
+                      <!-- Modal body -->
+                      <div class="modal-body">
+                        Are you sure you want to delete <br>
+                          ID: {{supplier.get_supplier_id()}}
+                          <br>
+                          Supplier: {{supplier.get_supplier()}}
+                          <br>
+                          Name: {{supplier.get_name()}}?
+                        <table>
+                              <tr>
+                                <th>Supplier ID</th>
+                                <th>Supplier</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Contact Number</th>
+                                <th>Address</th>
+                                <th>Country/State</th>
+                                <th>Postal Code</th>
+                                <th>Bank</th>
+                                <th>Bank Account</th>
+                                <th>Status</th>
+                                <th></th>
+                                <th></th>
+                              </tr>
+                              {% if supplier.supplier == supplier.supplier %}
+                              <tr>
+                                <td>{{ supplier.get_supplier_id() }}</td>
+                                <td>{{ supplier.get_supplier() }}</td>
+                                <td>{{ supplier.get_name() }}</td>
+                                <td>{{ supplier.get_email() }}</td>
+                                <td>{{ supplier.get_contact_no() }}</td>
+                                <td>{{ supplier.get_address() }}</td>
+                                <td>{{ supplier.get_country() }}</td>
+                                <td>{{ supplier.get_postal_code() }}</td>
+                                <td>{{ supplier.get_bank() }}</td>
+                                <td>{{ supplier.get_bank_acc() }}</td>
+                                <td>{{ supplier.get_status() }}</td>
+                                  <td></td>
+                                  <td></td>
+                              </tr>
+                              {% endif %}
+                          </table>
+                      </div>
+
+                      <!-- Modal footer -->
+                      <div class="modal-footer">
+                        <input type="submit" value="Delete" class="btn btn-danger">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+          </form>
+        </td>
+      </tr>
+      {% endif %}
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

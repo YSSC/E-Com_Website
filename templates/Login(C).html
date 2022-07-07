@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Fontawesome CDN Link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="font-awesome.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+            @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+            *{
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+              font-family: "Poppins" , sans-serif;
+            }
+            body{
+              min-height: 100vh;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background: white;
+              padding: 30px;
+            }
+            .container{
+              position: relative;
+              max-width: 850px;
+              width: 100%;
+              background: #fff;
+              padding: 40px 30px;
+              box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+              perspective: 2700px;
+            }
+            .container .cover{
+              position: absolute;
+              top: 0;
+              left: 50%;
+              height: 100%;
+              width: 50%;
+              z-index: 98;
+              transition: all 1s ease;
+              transform-origin: left;
+              transform-style: preserve-3d;
+            }
+            .container #flip:checked ~ .cover{
+              transform: rotateY(-180deg);
+            }
+             .container .cover .front,
+             .container .cover .back{
+              position: absolute;
+              top: 0;
+              left: 0;
+              height: 100%;
+              width: 100%;
+            }
+            .cover .back{
+              transform: rotateY(180deg);
+              -webkit-backface-visibility: hidden;
+            }
+            .container .cover::before,
+            .container .cover::after{
+              content: '';
+              position: absolute;
+              height: 100%;
+              width: 100%;
+              background: #F0BECA;
+            }
+            .container .cover::after{
+              opacity: 0;
+              transform: rotateY(180deg);
+              -webkit-backface-visibility: hidden;
+            }
+            .container .cover img{
+              position: absolute;
+              height: 100%;
+              width: 100%;
+              object-fit: cover;
+              z-index: 10;
+            }
+            .container .cover .text{
+              position: absolute;
+              z-index: 130;
+              height: 100%;
+              width: 100%;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+            }
+            .cover .text .text-1,
+            .cover .text .text-2{
+              font-size: 26px;
+              font-weight: 550;
+              color: white;
+              text-align: center;
+            }
+            .cover .text .text-2{
+              font-size: 15px;
+              font-weight: 500;
+            }
+            .container .forms{
+              height: 100%;
+              width: 100%;
+              background: white;
+            }
+            .container .form-content{
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            }
+            .form-content .login-form,
+            .form-content .signup-form{
+              width: calc(100% / 2 - 25px);
+            }
+            .forms .form-content .title{
+              position: relative;
+              font-size: 24px;
+              font-weight: 500;
+              color: #333;
+            }
+            .forms .form-content .title:before{
+              content: '';
+              position: absolute;
+              left: 0;
+              bottom: 0;
+              height: 3px;
+              width: 50px;
+              background: #F9426E;
+            }
+            .forms .signup-form  .title:before{
+              width: 50px;
+            }
+            .forms .form-content .input-boxes{
+              margin-top: 30px;
+            }
+            .forms .form-content .input-box{
+              display: flex;
+              align-items: center;
+              height: 50px;
+              width: 100%;
+              margin: 10px 0;
+              position: relative;
+            }
+            .form-content .input-box input{
+              height: 100%;
+              width: 100%;
+              outline: none;
+              border: none;
+              padding: 0 30px;
+              font-size: 16px;
+              font-weight: 500;
+              border-bottom: 2px solid rgba(0,0,0,0.2);
+              transition: all 0.3s ease;
+            }
+            .form-content .input-box input:focus,
+            .form-content .input-box input:valid{
+              border-color: #7d2ae8;
+            }
+            .form-content .input-box i{
+              position: absolute;
+              color: #F98908;
+              font-size: 17px;
+            }
+            .forms .form-content .text{
+              font-size: 14px;
+              font-weight: 500;
+              color: #333;
+            }
+            .forms .form-content .text a{
+              text-decoration: none;
+            }
+            .forms .form-content .text a:hover{
+              text-decoration: underline;
+            }
+            .forms .form-content .button{
+              color: #fff;
+              margin-top: 40px;
+            }
+            .forms .form-content .button input{
+              color: #fff;
+              background: #7CF1AE;
+              border-radius: 6px;
+              padding: 0;
+              cursor: pointer;
+              transition: all 0.4s ease;
+            }
+            .forms .form-content .button input:hover{
+              background: #00D85C;
+            }
+            .forms .form-content label{
+              cursor: pointer;
+            }
+            .forms .form-content label:hover{
+              text-decoration: underline;
+            }
+            .forms .form-content .login-text,
+            .forms .form-content .sign-up-text{
+              text-align: center;
+              margin-top: 25px;
+            }
+            .container #flip{
+              display: none;
+            }
+            .text-danger {
+                color: red;
+                font-weight: 500;
+            }
+            @media (max-width: 730px) {
+              .container .cover{
+                display: none;
+              }
+              .form-content .login-form,
+              .form-content .signup-form{
+                width: 100%;
+              }
+              .form-content .signup-form{
+                display: none;
+              }
+              .container #flip:checked ~ .forms .signup-form{
+                display: block;
+              }
+              .container #flip:checked ~ .forms .login-form{
+                display: none;
+              }
+            }
+          </style>
+</head>
+
+    {% block content %}
+    {% from "_formHelper.html" import render_field %}
+
+    <a href="/"><i class='bx bx-x' style="font-size: 50px; position: absolute; top: 25px; right: 80px; color: #F9426E;"></i></a>
+  <div class="container">
+    <span id='date-time' hidden></span>
+    <input type="checkbox" id="flip">
+    <div class="cover">
+      <div class="front">
+        <div class="text">
+          <span class="text-1" style="font-weight: 800;">E S T H E R</span><br>
+        </div>
+      </div>
+      <div class="back">
+        <div class="text">
+          <span class="text-1" style="font-weight: 800;">E S T H E R</span>
+        </div>
+      </div>
+    </div>
+    <div class="forms">
+        <div class="form-content">
+          <div class="login-form">
+
+              {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class="flashes" id="flashes">
+                    {% for message in messages %}
+                        <li> {{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+              {% endwith %}
+
+            <div class="title">Customer Login</div>
+          <form action="" method="post">
+            <div class="input-boxes">
+              <div class="input-box">
+<!--                <i class="fas fa-envelope"></i>-->
+<!--                <input type="email" placeholder="Enter your email" required>-->
+                {{ render_field(form2.email, class="form-control") }}
+              </div>
+              <div class="input-box">
+<!--                <i class="fas fa-lock"></i>-->
+<!--                <input type="password" id="loginPassword" placeholder="Enter your password" required>-->
+<!--                <button onclick="if (loginPassword.type == 'text') loginPassword.type = 'password'; else loginPassword.type = 'text';" style="font-size: 10px;">Show Password</button>-->
+                {{ render_field(form2.password, class="form-control") }}
+              </div>
+
+                  {% if error == "wrongpassword" %}
+                    <p style="color: red; font-weight: 500; font-size: 15px;">Wrong email or password! Please Check Again!</p><br>
+                  {% endif %}
+              <div class="form-group">
+                {{ render_field(form2.remember, class="form-control") }}
+              </div><br>
+              <div class="text"><a href="/forgetpassword">Forgot password?</a></div>
+              <div class="button input-box">
+                <input type="submit" value="Login" style="font-size: 25px;">
+              </div>
+              <div class="text sign-up-text">Are you a Staff? <a href="/LoginS">Log In Here!</a> </div>
+              <div class="text sign-up-text">Don't have an account? <label for="flip"><u>Sign up now!</u></label></div>
+            </div>
+          </form>
+      </div>
+
+        <div class="signup-form">
+          <div class="title">Customer Signup</div><br>
+        <form action="#" method="POST">
+          <div class="form-group">
+            {{ render_field(form.first_name, class="form-control") }}
+          </div><br>
+          <div class="form-group">
+            {{ render_field(form.last_name, class="form-control") }}
+          </div><br>
+          <div class="form-group">
+            {{ render_field(form.gender, class="form-control") }}
+          </div><br>
+          <div class="form-group">
+            {{ render_field(form.email, class="form-control") }}
+          </div>
+
+            {% if error == "account_created_alr" %}
+                <p style="color: red;">Email is already been registered!</p>
+            {% endif %}<br>
+
+          <div class="form-group">
+            {{ render_field(form.phonenumber, class="form-control") }}
+          </div><br>
+          <div class="form-group">
+            {{ render_field(form.dateofbirth, class="form-control") }}
+          </div><br>
+          <div class="form-group">
+            {{ render_field(form.date_joined, class="form-control") }}
+          </div><br>
+          <div class="form-group" hidden>
+            {{ render_field(form.membership, class="form-check", style="list-style-type:none") }}
+          </div><br>
+          <div class="form-group">
+            {{ render_field(form.address, class="form-control") }}
+          </div><br>
+          <div class="form-group">
+            {{ render_field(form.password, class="form-control") }}
+          </div><br>
+          <div class="form-group">
+            {{ render_field(form.confirmpassword, class="form-control") }}
+          </div><br>
+          <div class="form-group" hidden>
+            {{ render_field(form.status, class="form-control") }}
+          </div><br>
+          <div class="input_field checkbox_option">
+            <input type="checkbox" id="cb1" required>
+            <label for="cb1">I agree with the <a href="https://www.termsfeed.com/live/4ed368e7-1767-49f2-a7c0-e1c4855f28ed">terms and conditions</a>.</label>
+          </div>
+          <input type="submit" value="Submit" class="btn btn-primary" style="font-size: 20px; margin-left: 120px; margin-top: 10px; background-color: #7CE5F1;">
+              <div class="text sign-up-text">Already have an account? <label for="flip"><u>Login now</u>!</label></div>
+        </form>
+    </div>
+    </div>
+    </div>
+  </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+    $("#flashes").delay(5000).slideUp(300);
+    });
+</script>
+    {% endblock %}
+</html>
+
+<!--<script>-->
+<!--&lt;!&ndash;    for password matching&ndash;&gt;-->
+<!--        var check = function() {-->
+<!--      if (document.getElementById('txtPassword').value ==-->
+<!--        document.getElementById('txtConfirmPassword').value) {-->
+<!--        document.getElementById('message').style.color = 'green';-->
+<!--        document.getElementById('message').innerHTML = 'Password matches!';-->
+<!--      } else {-->
+<!--        document.getElementById('message').style.color = 'red';-->
+<!--        document.getElementById('message').innerHTML = 'Password does not match!';-->
+<!--      }-->
+<!--    }-->
+<!--    var today = new Date();-->
+<!--    document.getElementById('date-time').innerHTML=today;-->
+<!--</script>-->

@@ -1,0 +1,257 @@
+#PRIYA'S PART------------------------------------------------------------------------------------------------------
+
+@app.route('/AdminProduct', methods=['GET', 'POST'])
+def create_product():
+    create_product_form = CreateProductForm(request.form)
+    if request.method == 'POST' and create_product_form.validate():
+        product_dict = {}
+        db = shelve.open('product.db', 'c')
+
+        try:
+            product_dict = db['Product']
+            product_list = []
+            for key in product_dict:
+                product = product_dict.get(key)
+                product_list.append(product)
+        except:
+            print("Error in retrieving Product from product.db.")
+
+        product = Product.Product(create_product_form.brand.data, create_product_form.name.data, create_product_form.shade.data, create_product_form.number.data, create_product_form.price.data, create_product_form.description.data, create_product_form.category.data, create_product_form.sub.data, create_product_form.quantity.data)
+
+        img = Image.open(request.files["image"])
+        img.load()
+        img.resize((1200, 600))
+        img.convert("RGB")
+        img.save(f"{basedir}/static/images/{product.get_product_id()}.png")
+
+        product_dict[product.get_product_id()] = product
+        db['Product'] = product_dict
+
+        db.close()
+
+        session['product_created'] = product.get_brand() + ' ' + product.get_name()
+
+        return redirect(url_for('retrieve_product'))
+    return render_template('AdminProduct.html', form=create_product_form)
+
+
+@app.route('/createDetail', methods=['GET', 'POST'])
+def create_detail():
+    create_detail_form = CreateDetailForm(request.form)
+    if request.method == 'POST' and create_detail_form.validate():
+        detail_dict = {}
+        db = shelve.open('detail.db', 'c')
+
+        try:
+            detail_dict = db['Detail']
+            detail_list = []
+            for key in detail_dict:
+                detail = detail_dict.get(key)
+                detail_list.append(detail)
+        except:
+            print("Error in retrieving Detail from detail.db.")
+
+        detail = Detail.Detail(create_detail_form.brand.data,
+                               create_detail_form.name.data,
+                               create_detail_form.shade.data,
+                               create_detail_form.number.data,
+                               create_detail_form.price.data,
+                               create_detail_form.description.data,
+                               create_detail_form.category.data,
+                               create_detail_form.sub.data,
+                               create_detail_form.quantity.data)
+
+        img = Image.open(request.files["image"])
+        img.load()
+        img.resize((1200, 600))
+        img.convert("RGB")
+        img.save(f"{basedir}/static/images/{detail.get_detail_id()}.png")
+
+        detail_dict[detail.get_detail_id()] = detail
+        db['Detail'] = detail_dict
+
+        db.close()
+
+        session['customer_created'] = detail.get_brand() + ' ' + detail.get_name()
+
+        return redirect(url_for('retrieve_detail'))
+    return render_template('createDetail.html', form=create_detail_form)
+
+
+@app.route('/AdminRetrieve')
+def retrieve_product():
+    product_dict = {}
+    db = shelve.open('product.db', 'r')
+    product_dict = db['Product']
+    db.close()
+
+    product_list = []
+    for key in product_dict:
+        product = product_dict.get(key)
+        product_list.append(product)
+
+    return render_template('AdminRetrieve.html', count=len(product_list), product_list=product_list)
+
+
+@app.route('/retrieveDetail')
+def retrieve_detail():
+    detail_dict =\
+        {}
+    db = shelve.open('detail.db', 'r')
+    detail_dict = db['Detail']
+    db.close()
+
+    detail_list = []
+    for key in detail_dict:
+        detail = detail_dict.get(key)
+        detail_list.append(detail)
+
+    return render_template('retrieveDetail.html', count=len(detail_list), detail_list=detail_list)
+
+
+@app.route('/Productpage')
+def Product_page():
+    detail_dict = {}
+    db = shelve.open('detail.db', 'r')
+    detail_dict = db['Detail']
+    db.close()
+
+    detail_list = []
+    for key in detail_dict:
+        detail = detail_dict.get(key)
+        if detail.get_sub() != 'Unavailable':
+            detail_list.append(detail)
+
+    return render_template('Productpage.html', count=len(detail_list), detail_list=detail_list)
+
+
+@app.route('/updateProduct/<int:id>/', methods=['GET', 'POST'])
+def update_product(id):
+    update_product_form = CreateProductForm(request.form)
+    if request.method == 'POST' and update_product_form.validate():
+        product_dict = {}
+        db = shelve.open('product.db', 'w')
+        product_dict = db['Product']
+
+        product = product_dict.get(id)
+        product.set_brand(update_product_form.brand.data)
+        product.set_name(update_product_form.name.data)
+        product.set_shade(update_product_form.shade.data)
+        product.set_number(update_product_form.number.data)
+        product.set_price(update_product_form.price.data)
+        product.set_description(update_product_form.description.data)
+        product.set_category(update_product_form.category.data)
+        product.set_sub(update_product_form.sub.data)
+        product.set_quantity(update_product_form.quantity.data)
+
+        img = Image.open(request.files["image"])
+        img.load()
+        img.resize((1200, 600))
+        img.convert("RGB")
+        img.save(f"{basedir}/static/images/{product.get_product_id()}.png")
+
+        db['Product'] = product_dict
+        db.close()
+
+        session['product_updated'] = product.get_brand() + ' ' + product.get_name()
+
+        return redirect(url_for('retrieve_product'))
+    else:
+        product_dict = {}
+        db = shelve.open('product.db', 'r')
+        product_dict = db['Product']
+        db.close()
+
+        product = product_dict.get(id)
+        update_product_form.brand.data = product.get_brand()
+        update_product_form.name.data = product.get_name()
+        update_product_form.shade.data = product.get_shade()
+        update_product_form.number.data = product.get_number()
+        update_product_form.price.data = product.get_price()
+        update_product_form.description.data = product.get_description()
+        update_product_form.category.data = product.get_category()
+        update_product_form.sub.data = product.get_sub()
+        update_product_form.quantity.data = product.get_quantity()
+        return render_template('updateProduct.html', form=update_product_form)
+
+
+@app.route('/updateDetail/<int:id>/', methods=['GET', 'POST'])
+def update_detail(id):
+    update_detail_form = CreateDetailForm(request.form)
+    if request.method == 'POST' and update_detail_form.validate():
+        detail_dict = {}
+        db = shelve.open('detail.db', 'w')
+        detail_dict = db['Detail']
+
+        detail = detail_dict.get(id)
+        detail.set_brand(update_detail_form.brand.data)
+        detail.set_name(update_detail_form.name.data)
+        detail.set_shade(update_detail_form.shade.data)
+        detail.set_number(update_detail_form.number.data)
+        detail.set_price(update_detail_form.price.data)
+        detail.set_description(update_detail_form.description.data)
+        detail.set_category(update_detail_form.category.data)
+        detail.set_sub(update_detail_form.sub.data)
+        detail.set_quantity(update_detail_form.quantity.data)
+
+        img = Image.open(request.files["image"])
+        img.load()
+        img.resize((1200, 600))
+        img.convert("RGB")
+        img.save(f"{basedir}/static/images/{detail.get_detail_id()}.png")
+
+        db['Detail'] = detail_dict
+        db.close()
+
+        session['customer_updated'] = detail.get_brand() + ' ' + detail.get_name()
+
+        return redirect(url_for('retrieve_detail'))
+    else:
+        detail_dict = {}
+        db = shelve.open('detail.db', 'r')
+        detail_dict = db['Detail']
+        db.close()
+
+        detail = detail_dict.get(id)
+        update_detail_form.brand.data = detail.get_brand()
+        update_detail_form.name.data = detail.get_name()
+        update_detail_form.shade.data = detail.get_shade()
+        update_detail_form.number.data = detail.get_number()
+        update_detail_form.price.data = detail.get_price()
+        update_detail_form.description.data = detail.get_description()
+        update_detail_form.category.data = detail.get_category()
+        update_detail_form.sub.data = detail.get_sub()
+        update_detail_form.quantity.data = detail.get_quantity()
+        return render_template('updateDetail.html', form=update_detail_form)
+
+
+@app.route('/deleteProduct/<int:id>', methods=['POST'])
+def delete_product(id):
+    product_dict = {}
+    db = shelve.open('product.db', 'w')
+    product_dict = db['Product']
+
+    product = product_dict.pop(id)
+
+    db['Product'] = product_dict
+    db.close()
+
+    session['product_deleted'] = product.get_brand() + ' ' + product.get_name()
+
+    return redirect(url_for('retrieve_product'))
+
+
+@app.route('/deleteDetail/<int:id>', methods=['POST'])
+def delete_detail(id):
+    detail_dict = {}
+    db = shelve.open('detail.db', 'w')
+    detail_dict = db['Detail']
+
+    detail = detail_dict.pop(id)
+
+    db['Detail'] = detail_dict
+    db.close()
+
+    session['customer_deleted'] = detail.get_brand() + ' ' + detail.get_name()
+
+    return redirect(url_for('retrieve_detail'))

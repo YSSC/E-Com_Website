@@ -1,0 +1,81 @@
+{%extends "base3.html"%}
+{%block title%}ESTHER - Online Course{%endblock%}
+
+{% block content %}
+
+<h1 class="display-4">Manage Courses</h1>
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link" href="/retrieveOffCourses">Offline Course</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" href="#">Online Course</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane container-fluid active">
+
+        <br>
+        <h2>Online Course</h2>
+
+
+<div>
+  {% if count == 0 %}
+  <p>There are no online courses.</p>
+  {% elif count == 1 %}
+  <p>There is 1 online course.</p>
+  {% else %}
+  <p>There are {{ count }} online courses.</p>
+  {% endif %}
+</div>
+<a href="/createOnCourse" class="btn btn-primary btn-lg">Create Online Course</a>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Course ID</th>
+        <th>Course Name</th>
+        <th>Course Description</th>
+        <th>Course Instructor</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Duration</th>
+        <th>Link</th>
+        <th>Status</th>
+        <th>Update</th>
+
+      </tr>
+    </thead>
+    <tbody>
+    {% for oncourse in on_courses_list %}
+      <tr>
+        <td>{{ oncourse.get_course_id() }}</td>
+        <td>{{ oncourse.get_course_name() }}</td>
+        <td>{{ oncourse.get_course_description() }}</td>
+        <td>{{ oncourse.get_course_instructor() }}</td>
+        <td>{{ oncourse.get_course_date() }}</td>
+        <td>{{ oncourse.get_course_time() }}</td>
+        <td>{{ oncourse.get_course_duration() }}</td>
+        <td>{{ oncourse.get_course_link() }}</td>
+
+        {% if oncourse.get_course_status() == "Upcoming" %}
+        <td style="color: #7b809a; font-weight: bold;">Upcoming</td>
+        {% elif oncourse.get_course_status() == "Available" %}
+        <td style="color: #00917C; font-weight: bold;">Available</td>
+        {% elif oncourse.get_course_status() == "Closed" %}
+        <td style="color: #FE1414; font-weight: bold;">Closed</td>
+        {% endif %}
+
+        <td><a href="/updateOnCourse/{{oncourse.get_course_id()}}" class="btn btn-warning">Update</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+    </div>
+</div>
+{%endblock%}
+

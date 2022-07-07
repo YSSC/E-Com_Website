@@ -1,0 +1,70 @@
+        .topnav {
+			background-color: black;
+			height: 40px;
+			padding: 8px;
+		}
+
+        .midnav {
+			background-color: white;
+			overflow: hidden;
+			height: 40px;
+			padding: 8px;
+		}
+
+		.bottomnav {
+			background-color: black;
+			overflow: hidden;
+			height: 40px;
+			padding: 8px;
+			text-align: center;
+		}
+
+		a {
+			color: #F0BECA;
+			padding-right: 10px;
+			padding-left: 10px;
+			font-weight: bold;
+		}
+
+		.line {
+			color: black;
+		}
+
+		.dropdown {
+		  position: relative;
+		  display: inline-block;
+		}
+
+		.dropdown-content {
+		  display: none;
+		  position: absolute;
+		  background-color: #f9f9f9;
+		  min-width: 160px;
+		  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+		  padding: 12px 16px;
+		  z-index: 1;
+		}
+
+		.dropdown:hover .dropdown-content {
+		  display: block;
+		}
+
+		.main {
+		    color: black;
+		    font-size: 25px;
+		    font-family: Dubai;
+		    color: #F0BECA;
+		}
+
+		.cart {
+		    padding-left: 5px;
+		    float: right;
+		}
+
+		.wishlist {
+		    padding-right: 5px;
+		}
+
+		.bars {
+            color: white;
+        }

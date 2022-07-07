@@ -1,0 +1,344 @@
+{% extends "base3.html" %}
+{% block title %}Warehouse{% endblock %}
+
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $("#myInput").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("#myTable tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+</script>
+<h1 class="display-4">Warehouse</h1>
+<div>
+  {% if count == 0 %}
+  <p>There are no products.</p>
+  {% elif count == 1 %}
+  <p>There is 1 products.</p>
+  {% else %}
+  <p>There are {{ count }} products.</p>
+  {% endif %}
+</div>
+
+
+<div>
+  <button type="button" class="btn btn-success"><a href="/createWarehouse">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus"
+      viewBox="0 0 16 16">
+      <path
+        d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z">
+      </path>
+      <path fill-rule="evenodd"
+        d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z">
+      </path>
+    </svg>Create</a></button>
+  <input type="text" style="margin-right: 5px;" id="myInput" onkeyup="myFunction()" placeholder="Search for events..">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Product Number</th>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Supplier</th>
+        <th>Order Status</th>
+        <th>Threshold</th>
+        <th>Category</th>
+        <th>Sub-category</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="myTable">
+      {% for warehouse in warehouses_list %}
+      {% if warehouse.threshold > warehouse.quantity %}
+      <tr style="background-color: #ff6961; ">
+        <td>{{ warehouse.get_warehouse_id() }}</td>
+        <td>{{ warehouse.product_number }}</td>
+        <td>{{ warehouse.product }}</td>
+        <td>{{ warehouse.quantity }}</td>
+        <td>{{ warehouse.supplier }}
+          <button style= "background-color: #006994; border-color: None;" data-toggle="modal" data-target="#view-modal{{warehouse.get_warehouse_id()}}"
+            class="btn btn-success">View</button>
+          <div class="modal fade bd-example-modal-xl" id="view-modal{{warehouse.get_warehouse_id()}}" tabindex="-1"
+            role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog modal-xl">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">
+                    <i class="glyphicon glyphicon-user"></i> {{warehouse.supplier}} Records
+                  </h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                </div>
+                <div class="modal-body">
+                  {% for i in suppliers_list %}
+                  {% if warehouse.supplier == i.get_supplier() %}
+                  <p>Supplier: {{ i.get_supplier() }}</p>
+                  <p>Name: {{ i.get_name() }}</p>
+                  <p>Email: {{ i.get_email() }}</p>
+                  <p>Contact No. : {{ i.get_contact_no() }}</p>
+                  <p>Address: {{ i.get_address() }}</p>
+                  <p>Country: {{ i.get_country() }}</p>
+                  <p>Postal Code: {{ i.get_postal_code() }}</p>
+                  <p>Bank Name: {{ i.get_bank() }}</p>
+                  <p>Bank Account: {{ i.get_bank_acc() }}</p>
+                  {% endif %}
+                  {% endfor %}
+
+                  <table>
+                    <tr>
+                      <th>Order ID</th>
+                      <th>Order Date</th>
+                      <th>Quantity</th>
+                      <th>Product Number</th>
+                      <th>Product</th>
+                      <th>Category</th>
+                      <th>Sub-Category</th>
+                      <th>Supplier</th>
+                      <th>Amount</th>
+                      <th>Delivery Date</th>
+                      <th>Order Status</th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                    {% for o in orders_list %}
+                    {% if warehouse.supplier == o.supplier %}
+                    <tr>
+                      <td>{{ o.get_order_id() }}</td>
+                      <td>{{ o.get_order_date() }}</td>
+                      <td>{{ o.quantity }}</td>
+                      <td>{{ o.product_number }}</td>
+                      <td>{{ o.product }}</td>
+                      <td>{{ o.category }}</td>
+                      <td>{{ o.sub_category }}</td>
+                      <td>{{ o.supplier }}</td>
+                      <td>{{ o.get_amount() }}</td>
+                      <td>{{ o.get_delivery_date() }}</td>
+                      <td>{{ o.order_status }} </td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                  </table>
+
+                </div>
+                <div>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>
+        {% if warehouse.order_status == 'Delivering' %}
+        <td>
+          <form action="{{url_for('status_order', id=warehouse.product_number)}}" id="warehouse.product_number"
+            method="POST">
+            <button class="btn btn-success">{{ warehouse.order_status }}</button>
+          </form>
+        </td>
+        {% elif warehouse.order_status() == 'Delivered' %}
+        <td>
+          <form action="{{url_for('status_order', id=warehouse.product_number)}}" id="id=warehouse.product_number"
+            method="POST">
+            <button class="btn btn-danger">{{ warehouse.get_order_status }}</button>
+          </form>
+        </td>
+        {% endif %}
+        <td>{{ warehouse.threshold }}</td>
+        <td>{{ warehouse.category }}</td>
+        <td>{{ warehouse.sub_category }}</td>
+
+        <td><a href="/updateWarehouse/{{warehouse.get_warehouse_id()}}" class="btn btn-warning">Update</a></td>
+        <td>
+          <form action="{{url_for('delete_warehouse', id=warehouse.get_warehouse_id())}}" method="POST">
+            <!-- Button to Open the Modal -->
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+              data-bs-target="#myModal_{{warehouse.get_warehouse_id()}}">
+              Delete
+            </button>
+
+            <!-- The Modal -->
+            <div class="modal" id="myModal_{{warehouse.get_warehouse_id()}}">
+              <div class="modal-dialog">
+                <div class="modal-content">
+
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                    <h4 class="modal-title">Delete Confirmation</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+
+                  <!-- Modal body -->
+                  <div class="modal-body">
+                    Are you sure you want to delete <br>
+                    ID: {{warehouse.get_warehouse_id()}}
+                    <br>
+                    Supplier: {{warehouse.supplier}}
+                    <br>
+                    Product: {{warehouse.product}}?
+                  </div>
+
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                    <input type="submit" value="Delete" class="btn btn-danger">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td>{{ warehouse.get_warehouse_id() }}</td>
+        <td>{{ warehouse.product_number }}</td>
+        <td>{{ warehouse.product }}</td>
+        <td>{{ warehouse.quantity }}</td>
+        <td>{{ warehouse.supplier }}
+          <button style= "background-color: #006994; border-color: None;" data-toggle="modal" data-target="#view-modal{{warehouse.get_warehouse_id()}}"
+            class="btn btn-success">View</button>
+          <div class="modal fade bd-example-modal-xl" id="view-modal{{warehouse.get_warehouse_id()}}" tabindex="-1"
+            role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog modal-xl">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">
+                    <i class="glyphicon glyphicon-user"></i> {{warehouse.supplier}} Records
+                  </h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                </div>
+                <div class="modal-body">
+                  {% for i in suppliers_list %}
+                  {% if warehouse.supplier == i.get_supplier() %}
+                  <p>Supplier: {{ i.get_supplier() }}</p>
+                  <p>Name: {{ i.get_name() }}</p>
+                  <p>Email: {{ i.get_email() }}</p>
+                  <p>Contact No. : {{ i.get_contact_no() }}</p>
+                  <p>Address: {{ i.get_address() }}</p>
+                  <p>Country: {{ i.get_country() }}</p>
+                  <p>Postal Code: {{ i.get_postal_code() }}</p>
+                  <p>Bank Name: {{ i.get_bank() }}</p>
+                  <p>Bank Account: {{ i.get_bank_acc() }}</p>
+                  {% endif %}
+                  {% endfor %}
+
+                  <table>
+                    <tr>
+                      <th>Order ID</th>
+                      <th>Order Date</th>
+                      <th>Quantity</th>
+                      <th>Product Number</th>
+                      <th>Product</th>
+                      <th>Category</th>
+                      <th>Sub-Category</th>
+                      <th>Supplier</th>
+                      <th>Amount</th>
+                      <th>Delivery Date</th>
+                      <th>Order Status</th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                    {% for o in orders_list %}
+                    {% if warehouse.supplier == o.supplier %}
+                    <tr>
+                      <td>{{ o.get_order_id() }}</td>
+                      <td>{{ o.get_order_date() }}</td>
+                      <td>{{ o.quantity }}</td>
+                      <td>{{ o.product_number }}</td>
+                      <td>{{ o.product }}</td>
+                      <td>{{ o.category }}</td>
+                      <td>{{ o.sub_category }}</td>
+                      <td>{{ o.supplier }}</td>
+                      <td>{{ o.get_amount() }}</td>
+                      <td>{{ o.get_delivery_date() }}</td>
+                      <td>{{ o.order_status }} </td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                  </table>
+
+                </div>
+                <div>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>
+        {% if warehouse.order_status == 'Delivering' %}
+        <td>
+          <form action="{{url_for('status_order', id=warehouse.product_number)}}" id="warehouse.product_number"
+            method="POST">
+            <button class="btn btn-success">{{ warehouse.order_status }}</button>
+          </form>
+        </td>
+        {% elif warehouse.order_status() == 'Delivered' %}
+        <td>
+          <form action="{{url_for('status_order', id=warehouse.product_number)}}" id="id=warehouse.product_number"
+            method="POST">
+            <button class="btn btn-danger">{{ warehouse.get_order_status }}</button>
+          </form>
+        </td>
+        {% endif %}
+        <td>{{ warehouse.threshold }}</td>
+        <td>{{ warehouse.category }}</td>
+        <td>{{ warehouse.sub_category }}</td>
+
+        <td><a href="/updateWarehouse/{{warehouse.get_warehouse_id()}}" class="btn btn-warning">Update</a></td>
+        <td>
+          <form action="{{url_for('delete_warehouse', id=warehouse.get_warehouse_id())}}" method="POST">
+            <!-- Button to Open the Modal -->
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+              data-bs-target="#myModal_{{warehouse.get_warehouse_id()}}">
+              Delete
+            </button>
+
+            <!-- The Modal -->
+            <div class="modal" id="myModal_{{warehouse.get_warehouse_id()}}">
+              <div class="modal-dialog">
+                <div class="modal-content">
+
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                    <h4 class="modal-title">Delete Confirmation</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+
+                  <!-- Modal body -->
+                  <div class="modal-body">
+                    Are you sure you want to delete <br>
+                    ID: {{warehouse.get_warehouse_id()}}
+                    <br>
+                    Supplier: {{warehouse.supplier}}
+                    <br>
+                    Product: {{warehouse.product}}?
+                  </div>
+
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                    <input type="submit" value="Delete" class="btn btn-danger">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </form>
+        </td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    </tbody>
+
+  </table>
+</div>
+{% endblock %}

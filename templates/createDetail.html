@@ -1,0 +1,52 @@
+{% extends "base3.html" %}
+{% block title %}Create Detail{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+<h1 class="display-4">Create Customer Products</h1>
+
+<form method="POST" action="" enctype="multipart/form-data">
+  <div class="form-group">
+    {{ render_field(form.brand, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.name, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.shade, class="form-control") }}
+  </div>
+   <div class="form-group">
+    {{ render_field(form.number, class="form-control") }}
+  </div>
+   <div class="form-group">
+    {{ render_field(form.price, class="form-control") }}
+  </div>
+      <div class="form-group">
+    {{ render_field(form.description, class="form-control") }}
+  </div>
+      <div class="form-group">
+    {{ render_field(form.category, class="form-control") }}
+  </div>
+      <div class="form-group">
+    {{ render_field(form.sub, class="form-control") }}
+  </div>
+      <div class="form-group">
+    {{ render_field(form.quantity, class="form-control") }}
+
+      <div>
+    {{ render_field(form.image, class="form-control",
+    onchange="document.getElementById('preview_img').src = window.URL.createObjectURL(this.files[0])")
+    }}
+  </div>
+  <br>
+  <h2>Preview image</h2><br>
+
+  <div class="col-lg-4">
+  <img id="preview_img" style="height: 100px; width: 100px" />
+  </div>
+
+  <input type="submit" value="Submit" class="btn btn-primary"/>
+  </form>
+
+{% endblock %}

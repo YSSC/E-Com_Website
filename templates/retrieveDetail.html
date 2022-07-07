@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      class="jsbin"
+      href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script
+      class="jsbin"
+      src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"
+    ></script>
+    <script
+      class="jsbin"
+      src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"
+    ></script>
+    <meta charset="utf-8" />
+    <title>ESTHER</title>
+    <!--[if IE]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+      <script>
+      function readURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+      $('#blah').attr('src', e.target.result).width(150).height(200);
+    };
+
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+      </script>
+    <style>
+      article,
+      aside,
+      figure,
+      footer,
+      header,
+      hgroup,
+      menu,
+      nav,
+      section {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+   <!-- <input type="file" onchange="readURL(this);" />
+    <img id="blah" src="#" alt="your image" />-->
+  </body>
+</html>
+
+{% extends "base3.html" %}
+{% block title %}Retrieve Customer Products{% endblock %}
+
+{% block content %}
+{% if 'customer_created' in session %}
+<div class="alert alert-success alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('customer_created', None) }} was created.
+</div>
+{% elif 'customer_updated' in session %}
+<div class="alert alert-warning alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('customer_updated', None) }} was updated.
+</div>
+{% elif 'customer_deleted' in session %}
+<div class="alert alert-danger alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('customer_deleted', None) }} was deleted.
+</div>
+{% endif %}
+
+<h1 class="display-4">Retrieve Customer Products</h1>
+<div>
+  {% if count == 0 %}
+  <p>There are no products.</p>
+  {% elif count == 1 %}
+  <p>There is 1 product.</p>
+  {% else %}
+  <p>There are {{ count }} products.</p>
+  {% endif %}
+</div>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Customer Product Number</th>
+        <th>Brand Name</th>
+        <th>Product Name</th>
+        <th>Shade</th>
+        <th>Number</th>
+        <th>Price</th>
+        <th>Description</th>
+        <th>Category</th>
+        <th>Availability</th>
+        <th>Quantity</th>
+        <th>Image</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for detail in detail_list %}
+      <tr>
+        <td>{{ detail.get_detail_id() }}</td>
+        <td>{{ detail.get_brand() }}</td>
+        <td>{{ detail.get_name() }}</td>
+        <td>{{ detail.get_shade() }}</td>
+        <td>{{ detail.get_number() }}</td>
+        <td>{{ detail.get_price() }}</td>
+        <td>{{ detail.get_description() }}</td>
+        <td>{{ detail.get_category() }}</td>
+        {% if detail.get_sub() == "Available" %}
+        <td style="color: #660066; font-weight: bold;">Available</td>
+        {% elif detail.get_sub() == "Unavailable" %}
+        <td style="color: #ff3300; font-weight: bold;">Unavailable</td>
+        {% endif %}
+        <td>{{ detail.get_quantity() }}<td>
+
+        <td><img src="/static/images//{{ detail.get_detail_id() }}.png" alt="image" width="150" height="150" /></td>
+
+        <td><a href="/updateDetail/{{detail.get_detail_id()}}" class="btn btn-warning">Update</a></td>
+        <td>
+        <form action="{{url_for('delete_detail', id=detail.get_detail_id())}}" method="POST">
+        <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{detail.get_brand()}} {{detail.get_name()}}?');">
+      </form>
+    </td>
+</form>
+      </tr>
+
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      class="jsbin"
+      href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script
+      class="jsbin"
+      src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"
+    ></script>
+    <script
+      class="jsbin"
+      src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"
+    ></script>
+    <meta charset="utf-8" />
+    <title>JS Bin</title>
+    <!--[if IE]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <script>
+      function readURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+      $('#blah').attr('src', e.target.result).width(150).height(200);
+    };
+
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+    </script>
+    <style>
+      article,
+      aside,
+      figure,
+      footer,
+      header,
+      hgroup,
+      menu,
+      nav,
+      section {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+   <!-- <input type="file" onchange="readURL(this);" />
+    <img id="blah" src="#" alt="your image" />-->
+  </body>
+</html>
+{% extends "base3.html" %}
+{% block title %}Library Loan System - Create Point{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+<h1 class="display-4">Create Point</h1>
+
+<form method="POST" action="">
+  <div class="form-group">
+    {{ render_field(form.product_name, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.claimed, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.expiry, class="form-control datepicker") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.status, class="form-check", style="list-style-type:none") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.points_needed, class="form-check", style="list-style-type:none") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.code, class="form-check") }}
+  </div>
+  <div class="form-group">
+    <label for ="file">Image: </label>
+    <input type="file" name = "file" id = "file" class="form-control" onchange="readURL(this);" />
+    <img id="blah" src="#" alt="your image" />
+  </div>
+  <input type="submit" value="Submit" class="btn btn-primary"/>
+</form>
+{% endblock %}
+
